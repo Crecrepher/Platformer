@@ -11,8 +11,8 @@ enum class SceneId
 	None = -1,
 	Title,
 	Menu,
-	Char1,
-	Char2,
+	//Char1,
+	//Char2,
 	Game1,
 	Game2,
 	Count

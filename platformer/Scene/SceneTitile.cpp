@@ -23,7 +23,6 @@ void SceneTitile::Init()
 	//계속써도되는거 add
 	Release();
 	AddGo(new SpriteGo("Icon"));
-	AddGo(new SpriteGo("Back"));
 	AddGo(new TextGo("Text"));
 	AddGo(new SoundGo("MoveSound"));
 
@@ -51,13 +50,6 @@ void SceneTitile::Enter()
 	findSGo->SetOrigin(Origins::MC);
 	findSGo->SetPosition(FRAMEWORK.GetWindowSize().x / 2.f, FRAMEWORK.GetWindowSize().y / 3.f);
 	findSGo->sortLayer = 1;
-
-	findSGo = (SpriteGo*)FindGo("Back");
-	findSGo->sprite.setTexture(*RESOURCE_MGR.GetTexture("graphics/title.png"));
-	findSGo->SetPosition(0.f,0.f);
-	findSGo->SetSize(0.7f, 0.7f);
-	findSGo->sortLayer = 0;
-
 
 
 	TextGo* findTGo = (TextGo*)FindGo("Text");

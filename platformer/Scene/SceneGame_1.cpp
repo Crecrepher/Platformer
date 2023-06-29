@@ -52,9 +52,6 @@ void SceneGame::Enter()
 {
 	Scene::Enter();
 
-
-	
-
 	TextGo* findTGo = (TextGo*)FindGo("Score");
 	findTGo->text.setFont(*RESOURCE_MGR.GetFont("fonts/DS-DIGI.ttf"));
 	findTGo->text.setString("Test PUFFER FISH 1");
@@ -166,6 +163,11 @@ void SceneGame::Update(float dt)
 	findPlayer->CheckStep();
 	findPlayer->CheckBlockSide();
 	findPlayer->CheckWallHold();
+
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Escape))
+	{
+		SCENE_MGR.ChangeScene(SceneId::Menu);
+	}
 }
 
 void SceneGame::Draw(sf::RenderWindow& window)

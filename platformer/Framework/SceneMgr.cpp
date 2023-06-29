@@ -4,8 +4,6 @@
 #include "Scene.h"
 #include "SceneTitile.h"
 #include "SceneMenu.h"
-#include "SceneChar_1.h"
-#include "SceneChar_2.h"
 #include "SceneGame_1.h"
 
 #include "ResourceMgr.h"
@@ -27,8 +25,6 @@ void SceneMgr::Init()
 			
 	scenes.push_back(new SceneTitile());
 	scenes.push_back(new SceneMenu());
-	scenes.push_back(new SceneChar_1());
-	scenes.push_back(new SceneChar_2());
 	scenes.push_back(new SceneGame());
 
 	for (auto scene : scenes)

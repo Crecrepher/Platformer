@@ -60,16 +60,7 @@
     <ClCompile Include="GameObject\TextGo.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Scene\SceneChar_1.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene\SceneChar_2.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Scene\SceneGame_1.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene\SceneGame_2.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Scene\SceneMenu.cpp">
@@ -149,16 +140,7 @@
     <ClInclude Include="GameObject\TextGo.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\SceneChar_1.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene\SceneChar_2.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Scene\SceneGame_1.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene\SceneGame_2.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Scene\SceneMenu.h">
