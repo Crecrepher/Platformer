@@ -165,6 +165,7 @@ void SceneGame::Update(float dt)
 
 	findPlayer->CheckStep();
 	findPlayer->CheckBlockSide();
+	findPlayer->CheckWallHold();
 }
 
 void SceneGame::Draw(sf::RenderWindow& window)

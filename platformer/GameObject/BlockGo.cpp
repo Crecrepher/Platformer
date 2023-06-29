@@ -18,19 +18,19 @@ BlockGo::~BlockGo()
 void BlockGo::SetPosition(float x, float y)
 {
 	RectGo::SetPosition(x, y);
-	blockUp.SetPosition(GetPosition().x, GetPosition().y - (rectangle.getSize().y / 2) + 0.1f);
+	blockUp.SetPosition(GetPosition().x, GetPosition().y - (rectangle.getSize().y / 2) + 1.0f);
 	blockDown.SetPosition(GetPosition().x, GetPosition().y + (rectangle.getSize().y / 2) - 0.1f);
-	blockLeft.SetPosition(GetPosition().x - (rectangle.getSize().x / 2) + 0.1f, GetPosition().y);
-	blockRight.SetPosition(GetPosition().x + (rectangle.getSize().x / 2) - 0.1f, GetPosition().y);
+	blockLeft.SetPosition(GetPosition().x - (rectangle.getSize().x / 2)- 0.1f, GetPosition().y);
+	blockRight.SetPosition(GetPosition().x + (rectangle.getSize().x / 2)- 0.1f, GetPosition().y);
 }
 
 void BlockGo::SetPosition(const sf::Vector2f& p)
 {
 	RectGo::SetPosition(p);
-	blockUp.SetPosition(GetPosition().x, GetPosition().y - (rectangle.getSize().y / 2) + 0.1f);
+	blockUp.SetPosition(GetPosition().x, GetPosition().y - (rectangle.getSize().y / 2) + 1.0f);
 	blockDown.SetPosition(GetPosition().x, GetPosition().y + (rectangle.getSize().y / 2) - 0.1f);
-	blockLeft.SetPosition(GetPosition().x - (rectangle.getSize().x / 2) + 0.1f, GetPosition().y);
-	blockRight.SetPosition(GetPosition().x + (rectangle.getSize().x / 2) - 0.1f, GetPosition().y);
+	blockLeft.SetPosition(GetPosition().x - (rectangle.getSize().x / 2)- 0.1f, GetPosition().y);
+	blockRight.SetPosition(GetPosition().x + (rectangle.getSize().x / 2)- 0.1f, GetPosition().y);
 }
 
 
@@ -39,8 +39,8 @@ void BlockGo::SetSize(const sf::Vector2f& size)
 	RectGo::SetSize(size);
 	blockUp.SetSize(size.x, 0.2f);
 	blockDown.SetSize(size.x, 0.2f);
-	blockLeft.SetSize(0.2f, size.y - 2.f);
-	blockRight.SetSize(0.2f, size.y - 2.f);
+	blockLeft.SetSize(0.2f / 2, size.y);
+	blockRight.SetSize(0.2f / 2, size.y);
 }
 
 void BlockGo::Init()
