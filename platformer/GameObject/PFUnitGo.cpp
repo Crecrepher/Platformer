@@ -85,15 +85,14 @@ void PFUnitGo::Update(float dt)
 	if (isWallHold && isJump && velocity.y>0)
 	{
 		velocity.y = 0;
-		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
+		if (!INPUT_MGR.GetKey(sf::Keyboard::Left) && INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
 		{
-			isWallHold = false;
 		}
 	}
 
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space) && (!isJump|| isWallHold))
 	{
-		velocity = sf::Vector2f(0.f, -1000.f);
+		velocity = sf::Vector2f(0.f, -1100.f);
 		isJump = true;
 	}
 
@@ -124,8 +123,13 @@ void PFUnitGo::CheckBlock(BlockGo* block)
 			stepCheck++;
 		}
 	}
-	else if (block->blockLeft.frect.intersects(sprite.getGlobalBounds()) && !block->IsPlatform())
+	
+	if (block->blockLeft.frect.intersects(sprite.getGlobalBounds()) && !block->IsPlatform())
 	{
+		if ((GetPosition().x + GetSize().x / 2) > (block->rectangle.getPosition().x - block->rectangle.getSize().x / 2))
+		{
+			sprite.setPosition((block->rectangle.getPosition().x )- (block->rectangle.getSize().x / 2 )- (GetSize().x*0.3 / 2)+0.2f, GetPosition().y);
+		}
 		if (!INPUT_MGR.GetKey(sf::Keyboard::Left) || INPUT_MGR.GetKey(sf::Keyboard::Right))
 		{
 			blockSideCheck++;
@@ -137,6 +141,10 @@ void PFUnitGo::CheckBlock(BlockGo* block)
 	}
 	else if (block->blockRight.frect.intersects(sprite.getGlobalBounds()) && !block->IsPlatform())
 	{
+		if ((GetPosition().x - GetSize().x / 2) < (block->rectangle.getPosition().x + block->rectangle.getSize().x / 2))
+		{
+			sprite.setPosition((block->rectangle.getPosition().x) + (block->rectangle.getSize().x / 2) + (GetSize().x * 0.3 / 2) - 0.2f, GetPosition().y);
+		}
 		if (!INPUT_MGR.GetKey(sf::Keyboard::Right) || INPUT_MGR.GetKey(sf::Keyboard::Left))
 		{
 			blockSideCheck++;
@@ -146,13 +154,14 @@ void PFUnitGo::CheckBlock(BlockGo* block)
 			wallHoldCheck++;
 		}
 	}
-	if (block->blockDown.frect.intersects(sprite.getGlobalBounds()) && !block->IsPlatform())
+	else if (block->blockDown.frect.intersects(sprite.getGlobalBounds()) && !block->IsPlatform())
 	{
 		if (velocity.y < 0)
 		{
 			velocity.y *= -1.f;
 		}
 	}
+
 }
 
 void PFUnitGo::CheckStep()

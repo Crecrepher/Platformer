@@ -26,7 +26,7 @@ void SceneGame::Init()
 	Release();
 	AddGo(new PFUnitGo("Player"));
 	AddGo(new TextGo("Score"));
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < 9; i++)
 	{
 		std::string str = "Block" + std::to_string(i);
 		AddGo(new BlockGo(str));
@@ -130,6 +130,13 @@ void SceneGame::Enter()
 	findBGo->rectangle.setFillColor(sf::Color::Green);
 	findBGo->SetPlatform(true);
 
+	str = "Block8";
+	findBGo = (BlockGo*)FindGo(str);
+	findBGo->SetSize(sf::Vector2f(100.f, 30.f));
+	findBGo->SetOrigin(Origins::MC);
+	findBGo->SetPosition(FRAMEWORK.GetWindowSize().x * 0.65,
+		FRAMEWORK.GetWindowSize().y * 0.5);
+
 	findBGo = (BlockGo*)FindGo("Block1");
 	PFUnitGo* findPlayer = (PFUnitGo*)FindGo("Player");
 	findPlayer->sprite.setTexture(*RESOURCE_MGR.GetTexture("graphics/player4.png"));
@@ -153,7 +160,7 @@ void SceneGame::Update(float dt)
 	TextGo* findTGo = (TextGo*)FindGo("Score");
 	PFUnitGo* findPlayer = (PFUnitGo*)FindGo("Player");
 
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < 9; i++)
 	{
 		std::string str = "Block" + std::to_string(i);
 		BlockGo* findBGo = (BlockGo*)FindGo(str);

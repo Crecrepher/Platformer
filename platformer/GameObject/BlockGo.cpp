@@ -39,8 +39,8 @@ void BlockGo::SetSize(const sf::Vector2f& size)
 	RectGo::SetSize(size);
 	blockUp.SetSize(size.x, 0.2f);
 	blockDown.SetSize(size.x, 0.2f);
-	blockLeft.SetSize(0.2f / 2, size.y);
-	blockRight.SetSize(0.2f / 2, size.y);
+	blockLeft.SetSize(0.2f / 2, size.y-5.f);
+	blockRight.SetSize(0.2f / 2, size.y-5.f);
 }
 
 void BlockGo::Init()
