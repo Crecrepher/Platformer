@@ -187,9 +187,8 @@ void PFUnitGo::Update(float dt)
 	{
 		velocity.y = -1000.f;
 		isJump = true;
-
 		climbLadder = false;
-
+		jump.play();
 	}
 	Jump(dt);
 	if (!isJump)

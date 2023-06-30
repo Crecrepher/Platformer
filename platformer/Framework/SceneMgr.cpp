@@ -60,7 +60,7 @@ void SceneMgr::Release()
 void SceneMgr::Update(float dt)
 {
 	timer += dt;
-	if (timer >= 1.33f)
+	if (timer >= 1.05f)
 	{
 		timeFlip = !timeFlip;
 		timer = 0.f;

@@ -28,6 +28,8 @@ private:
 
 public:
 	SpriteGo playerSprite;
+	sf::Sound jump;
+
 
 	PFUnitGo(const std::string n);
 	~PFUnitGo();

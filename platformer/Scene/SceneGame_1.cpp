@@ -15,6 +15,8 @@ SceneGame::SceneGame() : Scene(SceneId::Game1)
 {
 	resources.push_back(std::make_tuple(ResourceTypes::Texture, "graphics/player4.png"));
 	resources.push_back(std::make_tuple(ResourceTypes::Texture, "graphics/player_sprite.png"));
+	resources.push_back(std::make_tuple(ResourceTypes::Sound, "sound/jump.wav"));
+	resources.push_back(std::make_tuple(ResourceTypes::Font, "fonts/neodgm.ttf"));
 }
 
 SceneGame::~SceneGame()
@@ -25,7 +27,7 @@ void SceneGame::Init()
 {
 	Release();
 	AddGo(new PFUnitGo("Player"));
-	AddGo(new TextGo("Score"));
+	AddGo(new TextGo("Info"));
 	AddGo(new LadderGo("Ladder"));
 	for (int i = 0; i < 9; i++)
 	{
@@ -53,9 +55,9 @@ void SceneGame::Enter()
 {
 	Scene::Enter();
 
-	TextGo* findTGo = (TextGo*)FindGo("Score");
-	findTGo->text.setFont(*RESOURCE_MGR.GetFont("fonts/DS-DIGI.ttf"));
-	findTGo->text.setString("Test PUFFER FISH 1");
+	TextGo* findTGo = (TextGo*)FindGo("Info");
+	findTGo->text.setFont(*RESOURCE_MGR.GetFont("fonts/neodgm.ttf"));
+	findTGo->text.setString("TEST PUFFER FISH ROOM");
 	findTGo->text.setCharacterSize(75);
 	findTGo->text.setFillColor(sf::Color::White);
 	Utils::SetOrigin(findTGo->text, Origins::TL);
@@ -159,6 +161,7 @@ void SceneGame::Enter()
 		- findPlayer->GetSize().y);
 	findPlayer->sortLayer = 2;
 	findPlayer->playerSprite.sortLayer = 3;
+	findPlayer->jump.setBuffer(*RESOURCE_MGR.GetSoundBuffer("sound/jump.wav"));
 
 	LadderGo* ladder = (LadderGo*)FindGo("Ladder");
 	ladder->SetSize(sf::Vector2f(50.f, 430.f));
@@ -178,7 +181,18 @@ void SceneGame::Exit()
 void SceneGame::Update(float dt)
 {
 	Scene::Update(dt);
-	TextGo* findTGo = (TextGo*)FindGo("Score");
+	TextGo* findTGo = (TextGo*)FindGo("Info");
+	if (SCENE_MGR.TimeBaseFliper())
+	{
+		findTGo->text.rotate(dt);
+	}
+	else
+	{
+		findTGo->text.rotate(-dt);
+	}
+	
+
+	findTGo = (TextGo*)FindGo("Score");
 	PFUnitGo* findPlayer = (PFUnitGo*)FindGo("Player");
 	LadderGo* ladder = (LadderGo*)FindGo("Ladder");
 	for (int i = 0; i < 9; i++)
