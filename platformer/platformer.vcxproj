@@ -166,6 +166,7 @@
     <ClCompile Include="GameObject\SoundGo.cpp" />
     <ClCompile Include="GameObject\TextGo.cpp" />
     <ClCompile Include="GameObject\PFUnitGo.cpp" />
+    <ClCompile Include="GameObject\LadderGo.cpp" />
     <ClCompile Include="Scene\SceneGame_1.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -202,6 +203,7 @@
     <ClInclude Include="GameObject\SoundGo.h" />
     <ClInclude Include="GameObject\TextGo.h" />
     <ClInclude Include="GameObject\PFUnitGo.h" />
+    <ClInclude Include="GameObject\LadderGo.h" />
     <ClInclude Include="Scene\SceneGame_1.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>

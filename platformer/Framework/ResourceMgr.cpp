@@ -134,6 +134,7 @@ void ResourceMgr::Unload(const std::vector<std::tuple<ResourceTypes, std::string
 
 sf::Texture* ResourceMgr::GetTexture(const std::string& id)
 {
+	
 	auto it = mapTexture.find(id);
 	if (it != mapTexture.end())
 	{

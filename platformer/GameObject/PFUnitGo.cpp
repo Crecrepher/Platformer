@@ -1,10 +1,14 @@
 #include "stdafx.h"
 #include "PFUnitGo.h"
 #include "InputMgr.h"
+#include "LadderGo.h"
+#include "FloatRectGo.h"
+#include "BlockGo.h"
 
 PFUnitGo::PFUnitGo(const std::string n) : SpriteGo(n), speed(500),
 isJump(true), isDead(false), velocity(0.f, 1000.f), gravity(0.f, 3000.f),
-isBlockedSide(false), stepCheck(0), blockSideCheck(0), wallHoldCheck(0), isWallHold(false)
+isBlockedSide(false), stepCheck(0), blockSideCheck(0), wallHoldCheck(0), isWallHold(false),
+haveLadder(false), climbLadder(false)
 {
 
 }
@@ -16,29 +20,31 @@ PFUnitGo::~PFUnitGo()
 void PFUnitGo::SetPosition(float x, float y)
 {
 	SpriteGo::SetPosition(x, y);
-	foot.SetPosition(x, y-1.0f);
+	playerSprite.SetPosition(x, y - (GetSize().y * 0.3 / 2));
 }
 
 void PFUnitGo::SetPosition(const sf::Vector2f& p)
 {
 	SpriteGo::SetPosition(p);
-	foot.SetPosition(p.x,p.y-1.0f);
+	playerSprite.SetPosition(p.x,p.y - (GetSize().y*0.3/2));
 }
 
 void PFUnitGo::SetOrigin(Origins origin)
 {
 	SpriteGo::SetOrigin(origin);
+	playerSprite.SetOrigin(Origins::MC);
 }
 
 void PFUnitGo::SetOrigin(float x, float y)
 {
 	SpriteGo::SetOrigin(x, y);
+	playerSprite.SetOrigin(Origins::MC);
 }
 
 void PFUnitGo::SetSize(float xSize, float ySize)
 {
 	SpriteGo::SetSize(xSize, ySize);
-	foot.SetSize(GetSize().x, 10.0f);
+	playerSprite.SetSize(xSize, ySize);
 }
 
 void PFUnitGo::Init()
@@ -60,15 +66,14 @@ void PFUnitGo::Release()
 void PFUnitGo::Update(float dt)
 {
 	SpriteGo::Update(dt);
-	//foot.SetSize(GetSize().x,2.f);
-	//foot.SetPosition(GetPosition().x
-	//	, sprite.getLocalBounds().top + sprite.getLocalBounds().height - 2.f);
+
 	stepCheck = 0;
 	blockSideCheck = 0;
 	wallHoldCheck = 0;
-	
+	haveLadderCheck = 0;
+	gravity.y = 3000;
 
-	if (!isBlockedSide || !isWallHold)
+	if ((!isBlockedSide || !isWallHold)&& !climbLadder)
 	{
 		if (INPUT_MGR.GetKey(sf::Keyboard::Left))
 		{
@@ -76,9 +81,13 @@ void PFUnitGo::Update(float dt)
 			{
 				velocity.x = 0.5;
 			}
-			velocity.x -= 0.001f;
+			else if (velocity.x > -0.5f)
+			{
+				velocity.x -= 0.002f;
+			}
+			
 			SetPosition(GetPosition().x + (velocity.x *speed * dt), GetPosition().y);
-			SetFlipX(false);
+			playerSprite.SetFlipX(false);
 		}
 		else if (INPUT_MGR.GetKey(sf::Keyboard::Right))
 		{
@@ -86,9 +95,12 @@ void PFUnitGo::Update(float dt)
 			{
 				velocity.x = -0.5;
 			}
-			velocity.x += 0.001f;
+			else if (velocity.x < 0.5f)
+			{
+				velocity.x += 0.002f;
+			}
 			SetPosition(GetPosition().x + (velocity.x * speed * dt), GetPosition().y);
-			SetFlipX(true);
+			playerSprite.SetFlipX(true);
 		}
 		else if (velocity.x > 0)
 		{
@@ -110,42 +122,99 @@ void PFUnitGo::Update(float dt)
 		{
 			velocity.x += 0.01f;
 		}
+	
 		SetPosition(GetPosition().x + (velocity.x * speed * dt), GetPosition().y);
 	}
 	
-
-
-	
 	if (isWallHold && isJump && velocity.y>0)
 	{
+		velocity.x = 0;
 		velocity.y = 0;
-		if (!INPUT_MGR.GetKey(sf::Keyboard::Left) && INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
+		if (INPUT_MGR.GetKey(sf::Keyboard::Left) && INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
 		{
-			velocity += sf::Vector2f(1500.f, 0.f);
+			SetPosition(GetPosition().x + 3.0f, GetPosition().y);
+			velocity += sf::Vector2f(0.5f, 0.f);
+		}
+		else if (INPUT_MGR.GetKey(sf::Keyboard::Right) && INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
+		{
+			SetPosition(GetPosition().x - 3.0f, GetPosition().y);
+			velocity -= sf::Vector2f(0.5f, 0.f);
+		}
+	}
+	else if (isWallHold && !isJump)
+	{
+		if (INPUT_MGR.GetKey(sf::Keyboard::Left))
+		{
+			velocity.x += 0.01;
+		}
+		else if (INPUT_MGR.GetKey(sf::Keyboard::Right))
+		{
+			velocity.x -= 0.01;
 		}
 	}
 
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space) && (!isJump|| isWallHold))
+
+	if (haveLadder)
 	{
-		//SetPosition(GetPosition().x, GetPosition().y - 10.0f);
-		velocity.y = -1100.f;
-		isJump = true;
+		if (INPUT_MGR.GetKey(sf::Keyboard::Up) ||
+			INPUT_MGR.GetKey(sf::Keyboard::Down))
+		{
+			climbLadder = true;
+		}
+		if (climbLadder)
+		{
+			gravity.y = 0;
+			velocity.x = 0;
+			velocity.y = 0;
+			if (INPUT_MGR.GetKey(sf::Keyboard::Up))
+			{
+				SetPosition(GetPosition().x, GetPosition().y - (700.f * dt));
+			}
+			else if (INPUT_MGR.GetKey(sf::Keyboard::Down))
+			{
+				SetPosition(GetPosition().x, GetPosition().y + (700.f * dt));
+			}
+		}
+	}
+	else
+	{
+		climbLadder = false;
 	}
 
-	Jump(dt);
 
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space) && ((!isJump|| isWallHold)||climbLadder))
+	{
+		velocity.y = -1000.f;
+		isJump = true;
+
+		climbLadder = false;
+
+	}
+	Jump(dt);
+	if (!isJump)
+	{
+		playerSprite.sprite.rotate(velocity.x * dt * 2000);
+	}
 }
 
 void PFUnitGo::Draw(sf::RenderWindow& window)
 {
 	SpriteGo::Draw(window);
+	playerSprite.Draw(window);
 }
 
 void PFUnitGo::Jump(float dt)
 {
 	if (isJump)
 	{
-		velocity += gravity * dt;
+		if (velocity.y < 700.0f)
+		{
+			velocity += gravity * dt;
+		}
+		if (!isWallHold)
+		{
+			playerSprite.sprite.rotate(dt * -300 * playerSprite.sprite.getScale().x);
+		}
 		SetPosition(position + velocity * dt);
 	}
 }
@@ -162,6 +231,7 @@ void PFUnitGo::CheckBlock(BlockGo* block)
 	
 	if (block->blockLeft.frect.intersects(sprite.getGlobalBounds()) && !block->IsPlatform())
 	{
+		velocity.x = 0.f;
 		if ((GetPosition().x + GetSize().x / 2) > (block->rectangle.getPosition().x - block->rectangle.getSize().x / 2))
 		{
 			sprite.setPosition((block->rectangle.getPosition().x )- (block->rectangle.getSize().x / 2 )- (GetSize().x*0.3 / 2)+0.2f, GetPosition().y);
@@ -177,6 +247,7 @@ void PFUnitGo::CheckBlock(BlockGo* block)
 	}
 	else if (block->blockRight.frect.intersects(sprite.getGlobalBounds()) && !block->IsPlatform())
 	{
+		velocity.x = 0.f;
 		if ((GetPosition().x - GetSize().x / 2) < (block->rectangle.getPosition().x + block->rectangle.getSize().x / 2))
 		{
 			sprite.setPosition((block->rectangle.getPosition().x) + (block->rectangle.getSize().x / 2) + (GetSize().x * 0.3 / 2) - 0.2f, GetPosition().y);
@@ -197,6 +268,25 @@ void PFUnitGo::CheckBlock(BlockGo* block)
 			velocity.y *= -1.f;
 		}
 	}
+
+}
+
+void PFUnitGo::CheckLadderBlock(LadderGo* ladder)
+{
+	if (ladder->rectangle.getGlobalBounds().intersects(sprite.getGlobalBounds()))
+	{
+		haveLadderCheck++;
+		if (velocity.y > 0 && GetPosition().y - 5.f <= ladder->rectangle.getGlobalBounds().top)
+		{
+			stepCheck++;
+		}
+
+		if (climbLadder)
+		{
+			SetPosition(ladder->GetPosition().x, GetPosition().y);
+		}
+	}
+
 
 }
 
@@ -234,4 +324,9 @@ void PFUnitGo::CheckWallHold()
 	{
 		isWallHold = false;
 	}
+}
+
+void PFUnitGo::CheckLadder()
+{
+	haveLadder = haveLadderCheck > 0;
 }

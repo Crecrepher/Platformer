@@ -1,7 +1,9 @@
 #pragma once
 #include "SpriteGo.h"
-#include "BlockGo.h"
-#include "FloatRectGo.h"
+
+
+class BlockGo;
+class LadderGo;
 
 class PFUnitGo : public SpriteGo
 {
@@ -11,6 +13,8 @@ private:
 	bool isDead;
 	bool isBlockedSide;
 	bool isWallHold;
+	bool haveLadder;
+	bool climbLadder;
 
 	sf::Vector2f velocity;
 	sf::Vector2f gravity;
@@ -18,10 +22,13 @@ private:
 	int stepCheck;
 	int blockSideCheck;
 	int wallHoldCheck;
+	int haveLadderCheck;
 
-	FloatRectGo foot;
+	
 
 public:
+	SpriteGo playerSprite;
+
 	PFUnitGo(const std::string n);
 	~PFUnitGo();
 	virtual void SetPosition(float x, float y)override;
@@ -41,8 +48,11 @@ public:
 	void Jump(float dt);
 
 	void CheckBlock(BlockGo* block);
+	void CheckLadderBlock(LadderGo* ladder);
+
 	void CheckStep();
 	void CheckBlockSide();
 	void CheckWallHold();
+	void CheckLadder();
 };
 
