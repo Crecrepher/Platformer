@@ -12,16 +12,15 @@ Framework::Framework(int w, int h, const std::string& t)
 void Framework::Init(int width, int height, const std::string& title)
 {
 	window.create(sf::VideoMode(width, height), title);
-    //ÀüÃ¼¾µ°Å ±×¸®±â
+
     RESOURCE_MGR.Load(ResourceTypes::Font, "fonts/DS-DIGI.ttf");
     RESOURCE_MGR.Load(ResourceTypes::Texture, "graphics/player4.png");
-    //ÆÀ¹ö²¨
-    RESOURCE_MGR.Load(ResourceTypes::Font, "fonts/KOMIKAP_.ttf");
-    RESOURCE_MGR.Load(ResourceTypes::Texture, "graphics/timber_icon.png");
-    RESOURCE_MGR.Load(ResourceTypes::Texture, "graphics/title.png");
+    RESOURCE_MGR.Load(ResourceTypes::Sound, "sound/win.wav");
+    RESOURCE_MGR.Load(ResourceTypes::Sound, "sound/select.wav");
+    RESOURCE_MGR.Load(ResourceTypes::Sound, "sound/bgm.wav");
+    RESOURCE_MGR.Load(ResourceTypes::Texture, "graphics/icon.png");
     RESOURCE_MGR.Load(ResourceTypes::Sound, "sound/chop.wav");
     RESOURCE_MGR.Load(ResourceTypes::Sound, "sound/death.wav");
-    RESOURCE_MGR.Load(ResourceTypes::Sound, "sound/bgm_main.wav");
     SCENE_MGR.Init();
 
  
@@ -29,13 +28,15 @@ void Framework::Init(int width, int height, const std::string& title)
 
 void Framework::Release()
 {
+    RESOURCE_MGR.UnLoad(ResourceTypes::Font, "fonts/DS-DIGI.ttf");
     RESOURCE_MGR.UnLoad(ResourceTypes::Texture, "graphics/player4.png");
-    RESOURCE_MGR.UnLoad(ResourceTypes::Font, "fonts/KOMIKAP_.ttf");
-    RESOURCE_MGR.UnLoad(ResourceTypes::Texture, "graphics/title.png");
-    RESOURCE_MGR.UnLoad(ResourceTypes::Texture, "graphics/timber_icon.png");
+    RESOURCE_MGR.UnLoad(ResourceTypes::Sound, "sound/win.wav");
+    RESOURCE_MGR.UnLoad(ResourceTypes::Sound, "sound/select.wav");
+    RESOURCE_MGR.UnLoad(ResourceTypes::Texture, "graphics/icon.png");
+	RESOURCE_MGR.UnLoad(ResourceTypes::Sound, "sound/bgm.wav");
     RESOURCE_MGR.UnLoad(ResourceTypes::Sound, "sound/chop.wav");
     RESOURCE_MGR.UnLoad(ResourceTypes::Sound, "sound/death.wav");
-    RESOURCE_MGR.UnLoad(ResourceTypes::Sound, "sound/bgm_main.wav");
+  
     SCENE_MGR.Release();
 }
 

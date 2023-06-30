@@ -10,8 +10,8 @@
 
 SceneTitile::SceneTitile() : Scene(SceneId::Title)
 {
-	//resources.push_back(std::make_tuple(ResourceTypes::Texture, "graphics/timber_icon.png"));
-	//여기서만 쓰는거
+	resources.push_back(std::make_tuple(ResourceTypes::Font, "fonts/neodgm.ttf"));
+	resources.push_back(std::make_tuple(ResourceTypes::Sound, "sound/win.wav"));
 }
 
 SceneTitile::~SceneTitile()
@@ -24,6 +24,7 @@ void SceneTitile::Init()
 	Release();
 	AddGo(new SpriteGo("Icon"));
 	AddGo(new TextGo("Text"));
+	AddGo(new SoundGo("Start"));
 	AddGo(new SoundGo("MoveSound"));
 
 	for (auto go : gameObjects)
@@ -46,14 +47,14 @@ void SceneTitile::Enter()
 {
 	Scene::Enter();
 	SpriteGo* findSGo = (SpriteGo*)FindGo("Icon");
-	findSGo->sprite.setTexture(*RESOURCE_MGR.GetTexture("graphics/timber_icon.png"));
+	findSGo->sprite.setTexture(*RESOURCE_MGR.GetTexture("graphics/icon.png"));
 	findSGo->SetOrigin(Origins::MC);
 	findSGo->SetPosition(FRAMEWORK.GetWindowSize().x / 2.f, FRAMEWORK.GetWindowSize().y / 3.f);
 	findSGo->sortLayer = 1;
 
 
 	TextGo* findTGo = (TextGo*)FindGo("Text");
-	findTGo->text.setFont(*RESOURCE_MGR.GetFont("fonts/KOMIKAP_.ttf"));
+	findTGo->text.setFont(*RESOURCE_MGR.GetFont("fonts/neodgm.ttf"));
 	findTGo->text.setString("PRESS ENTER");
 	findTGo->text.setCharacterSize(125);
 	findTGo->text.setFillColor(sf::Color::White);
@@ -61,9 +62,11 @@ void SceneTitile::Enter()
 	findTGo->text.setPosition(FRAMEWORK.GetWindowSize().x * 0.5f, FRAMEWORK.GetWindowSize().y * 0.7f);
 	findTGo->sortLayer = 1;
 
-	SoundGo* soundChop = (SoundGo*)FindGo("MoveSound");
-	soundChop->sound.setBuffer(*RESOURCE_MGR.GetSoundBuffer("sound/chop.wav"));
-	//생기고 사라질거 샛 택스쳐
+	SoundGo* sou = (SoundGo*)FindGo("Start");
+	sou->sound.setBuffer(*RESOURCE_MGR.GetSoundBuffer("sound/win.wav"));
+	sou->sound.play();
+	sou = (SoundGo*)FindGo("MoveSound");
+	sou->sound.setBuffer(*RESOURCE_MGR.GetSoundBuffer("sound/select.wav"));
 }
 
 void SceneTitile::Exit()
@@ -76,17 +79,16 @@ void SceneTitile::Update(float dt)
 	Scene::Update(dt);
 
 	SpriteGo* findGo = (SpriteGo*)FindGo("Icon");
-	findGo->SetSize(1.8f + (SCENE_MGR.TimerTime() / 10.f),
-		1.8f + (SCENE_MGR.TimerTime() / 10.f));
+	findGo->SetSize(1.5f, 1.5f);
 
 	TextGo* findTGo = (TextGo*)FindGo("Text");
 	findTGo->SetActive(SCENE_MGR.TimeBaseFliper());
 
-	SoundGo* soundChop = (SoundGo*)FindGo("MoveSound");
+	SoundGo* sound = (SoundGo*)FindGo("MoveSound");
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Enter))
 	{
+		sound->sound.play();
 		SCENE_MGR.ChangeScene(SceneId::Menu);
-		soundChop->sound.play();
 	}
 }
 

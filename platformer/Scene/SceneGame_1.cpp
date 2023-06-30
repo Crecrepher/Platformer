@@ -195,6 +195,7 @@ void SceneGame::Update(float dt)
 	findPlayer->CheckLadder();
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Escape))
 	{
+		SCENE_MGR.BgmOff();
 		SCENE_MGR.ChangeScene(SceneId::Menu);
 	}
 }

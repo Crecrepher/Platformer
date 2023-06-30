@@ -163,6 +163,7 @@ void PFUnitGo::Update(float dt)
 		}
 		if (climbLadder)
 		{
+			playerSprite.sprite.setRotation(0);
 			gravity.y = 0;
 			velocity.x = 0;
 			velocity.y = 0;
@@ -211,9 +212,9 @@ void PFUnitGo::Jump(float dt)
 		{
 			velocity += gravity * dt;
 		}
-		if (!isWallHold)
+		if (!isWallHold && !climbLadder)
 		{
-			playerSprite.sprite.rotate(dt * -300 * playerSprite.sprite.getScale().x);
+			playerSprite.sprite.rotate(dt * -10000 * playerSprite.sprite.getScale().x);
 		}
 		SetPosition(position + velocity * dt);
 	}

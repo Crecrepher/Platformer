@@ -35,10 +35,7 @@ void SceneMgr::Init()
 	currentSceneId = startSceneId;
 	currentScene = scenes[(int)currentSceneId];
 	currentScene->Enter();
-
-	bgmPlay = true;
-	bgm.SetName("Bgm");
-	bgm.sound.setBuffer(*RESOURCE_MGR.GetSoundBuffer("sound/bgm_main.wav"));
+	bgm.sound.setBuffer(*RESOURCE_MGR.GetSoundBuffer("sound/bgm.wav"));
 	bgm.sound.setLoop(true);
 }
 
@@ -74,7 +71,6 @@ void SceneMgr::Update(float dt)
 		bgm.sound.play();
 		bgmPlay = false;
 	}
-
 	scenes[(int)currentSceneId]->Update(dt);
 }
 
@@ -91,4 +87,14 @@ float SceneMgr::TimerTime() const
 bool SceneMgr::TimeBaseFliper() const
 {
 	return timeFlip;
+}
+
+void SceneMgr::BgmOn()
+{
+	bgmPlay = true;
+}
+
+void SceneMgr::BgmOff()
+{
+	bgm.sound.stop();
 }

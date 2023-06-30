@@ -1,7 +1,7 @@
 #include "EffectGo.h"
 #include "stdafx.h"
 EffectGo::EffectGo(const std::string& n)
-	: SpriteGo(n), gravity(0.f, 100.f), duration(3.f), timer(0.f),isFire(false)
+	: SpriteGo(n), gravity(0.f, 3000.f), duration(3.f), timer(0.f),isFire(false)
 {
 	SetOrigin(Origins::MC);
 }
