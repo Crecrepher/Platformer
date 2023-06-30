@@ -66,17 +66,51 @@ void PFUnitGo::Update(float dt)
 	stepCheck = 0;
 	blockSideCheck = 0;
 	wallHoldCheck = 0;
+	
 
 	if (!isBlockedSide || !isWallHold)
 	{
 		if (INPUT_MGR.GetKey(sf::Keyboard::Left))
 		{
-			SetPosition(GetPosition().x - (speed * dt), GetPosition().y);
+			if (velocity.x > 0.6)
+			{
+				velocity.x = 0.5;
+			}
+			velocity.x -= 0.001f;
+			SetPosition(GetPosition().x + (velocity.x *speed * dt), GetPosition().y);
+			SetFlipX(false);
 		}
 		else if (INPUT_MGR.GetKey(sf::Keyboard::Right))
 		{
-			SetPosition(GetPosition().x + (speed * dt), GetPosition().y);
+			if (velocity.x < -0.6)
+			{
+				velocity.x = -0.5;
+			}
+			velocity.x += 0.001f;
+			SetPosition(GetPosition().x + (velocity.x * speed * dt), GetPosition().y);
+			SetFlipX(true);
 		}
+		else if (velocity.x > 0)
+		{
+			velocity.x -= 0.001f;
+		}
+		else if (velocity.x < 0)
+		{
+			velocity.x += 0.001f;
+		}
+		SetPosition(GetPosition().x + (velocity.x * speed * dt), GetPosition().y);
+	}
+	else
+	{
+		if (velocity.x > 0)
+		{
+			velocity.x -= 0.01f;
+		}
+		else if (velocity.x < 0)
+		{
+			velocity.x += 0.01f;
+		}
+		SetPosition(GetPosition().x + (velocity.x * speed * dt), GetPosition().y);
 	}
 	
 
@@ -87,12 +121,14 @@ void PFUnitGo::Update(float dt)
 		velocity.y = 0;
 		if (!INPUT_MGR.GetKey(sf::Keyboard::Left) && INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
 		{
+			velocity += sf::Vector2f(1500.f, 0.f);
 		}
 	}
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space) && (!isJump|| isWallHold))
 	{
-		velocity = sf::Vector2f(0.f, -1100.f);
+		//SetPosition(GetPosition().x, GetPosition().y - 10.0f);
+		velocity.y = -1100.f;
 		isJump = true;
 	}
 

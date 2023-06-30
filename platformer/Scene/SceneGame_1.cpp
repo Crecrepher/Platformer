@@ -145,7 +145,7 @@ void SceneGame::Enter()
 	findPlayer->SetPosition(findBGo->GetPosition().x, 
 		findBGo->GetPosition().y + (findBGo->rectangle.getSize().y / 2)
 		- findPlayer->GetSize().y);
-
+	
 }
 
 void SceneGame::Exit()
