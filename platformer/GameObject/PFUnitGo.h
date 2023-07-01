@@ -15,6 +15,7 @@ private:
 	bool isWallHold;
 	bool haveLadder;
 	bool climbLadder;
+	bool isPlatformDown;
 
 	sf::Vector2f velocity;
 	sf::Vector2f gravity;
@@ -56,5 +57,7 @@ public:
 	void CheckBlockSide();
 	void CheckWallHold();
 	void CheckLadder();
+
+	bool IsPlatformDown(BlockGo* block);
 };
 

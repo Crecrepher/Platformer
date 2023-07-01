@@ -9,6 +9,7 @@
 #include "PFUnitGo.h"
 #include "TextGo.h"
 #include "LadderGo.h"
+#include "BouncyBall.h"
 
 
 SceneGame::SceneGame() : Scene(SceneId::Game1)
@@ -29,6 +30,7 @@ void SceneGame::Init()
 	AddGo(new PFUnitGo("Player"));
 	AddGo(new TextGo("Info"));
 	AddGo(new LadderGo("Ladder"));
+	AddGo(new BouncyBall("Ball"));
 	for (int i = 0; i < 9; i++)
 	{
 		std::string str = "Block" + std::to_string(i);
@@ -54,6 +56,11 @@ void SceneGame::Release()
 void SceneGame::Enter()
 {
 	Scene::Enter();
+
+	BouncyBall* ball = (BouncyBall*)FindGo("Ball");
+	ball->SetBallSize(10.f);
+	ball->SetPosition(100.f, 100.f);
+
 
 	TextGo* findTGo = (TextGo*)FindGo("Info");
 	findTGo->text.setFont(*RESOURCE_MGR.GetFont("fonts/neodgm.ttf"));
@@ -195,11 +202,13 @@ void SceneGame::Update(float dt)
 	findTGo = (TextGo*)FindGo("Score");
 	PFUnitGo* findPlayer = (PFUnitGo*)FindGo("Player");
 	LadderGo* ladder = (LadderGo*)FindGo("Ladder");
+	BouncyBall* ball = (BouncyBall*)FindGo("Ball");
 	for (int i = 0; i < 9; i++)
 	{
 		std::string str = "Block" + std::to_string(i);
 		BlockGo* findBGo = (BlockGo*)FindGo(str);
 		findPlayer->CheckBlock(findBGo);
+		findBGo->CheckBlock(ball);
 	}
 	findPlayer->CheckLadderBlock(ladder);
 

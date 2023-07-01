@@ -8,7 +8,7 @@
 PFUnitGo::PFUnitGo(const std::string n) : SpriteGo(n), speed(500),
 isJump(true), isDead(false), velocity(0.f, 1000.f), gravity(0.f, 3000.f),
 isBlockedSide(false), stepCheck(0), blockSideCheck(0), wallHoldCheck(0), isWallHold(false),
-haveLadder(false), climbLadder(false)
+haveLadder(false), climbLadder(false), isPlatformDown(false)
 {
 
 }
@@ -50,7 +50,11 @@ void PFUnitGo::SetSize(float xSize, float ySize)
 void PFUnitGo::Init()
 {
 	SpriteGo::Init();
-	
+	stepCheck = 0;
+	blockSideCheck = 0;
+	wallHoldCheck = 0;
+	haveLadderCheck = 0;
+	gravity.y = 3000;
 }
 
 void PFUnitGo::Reset()
@@ -66,12 +70,8 @@ void PFUnitGo::Release()
 void PFUnitGo::Update(float dt)
 {
 	SpriteGo::Update(dt);
-
-	stepCheck = 0;
-	blockSideCheck = 0;
-	wallHoldCheck = 0;
-	haveLadderCheck = 0;
-	gravity.y = 3000;
+	Init();
+	
 
 	if ((!isBlockedSide || !isWallHold)&& !climbLadder)
 	{
@@ -129,7 +129,11 @@ void PFUnitGo::Update(float dt)
 	if (isWallHold && isJump && velocity.y>0)
 	{
 		velocity.x = 0;
-		velocity.y = 0;
+		if (velocity.y > 300.0f)
+		{
+			velocity.y = 300;
+		}
+		gravity.y = 200;
 		if (INPUT_MGR.GetKey(sf::Keyboard::Left) && INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
 		{
 			SetPosition(GetPosition().x + 3.0f, GetPosition().y);
@@ -183,7 +187,7 @@ void PFUnitGo::Update(float dt)
 	}
 
 
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space) && ((!isJump|| isWallHold)||climbLadder))
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space) && ((!isJump|| isWallHold)||climbLadder)&& !isPlatformDown)
 	{
 		velocity.y = -1000.f;
 		isJump = true;
@@ -195,6 +199,7 @@ void PFUnitGo::Update(float dt)
 	{
 		playerSprite.sprite.rotate(velocity.x * dt * 2000);
 	}
+
 }
 
 void PFUnitGo::Draw(sf::RenderWindow& window)
@@ -329,4 +334,9 @@ void PFUnitGo::CheckWallHold()
 void PFUnitGo::CheckLadder()
 {
 	haveLadder = haveLadderCheck > 0;
+}
+
+bool PFUnitGo::IsPlatformDown(BlockGo* block)
+{
+	return block->IsPlatform() && INPUT_MGR.GetKey(sf::Keyboard::Down) && INPUT_MGR.GetKeyDown(sf::Keyboard::Space);
 }

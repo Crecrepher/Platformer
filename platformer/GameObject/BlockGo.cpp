@@ -100,34 +100,34 @@ void BlockGo::CheckBlock(BouncyBall* ball)
 	if (BlockNBall(blockUp.frect,ball) && GetActive())
 	{
 		ball->Yup();
-		if (!isPlayer)
+		/*if (!isPlayer)
 		{
 			blockHP--;
-		}
+		}*/
 	}
 	if (BlockNBall(blockDown.frect, ball) && GetActive())
 	{
 		ball->Ydown();
-		if (!isPlayer)
+		/*if (!isPlayer)
 		{
 			blockHP--;
-		}
+		}*/
 	}
 	if (BlockNBall(blockLeft.frect, ball) && GetActive())
 	{
 		ball->Xleft();
-		if (!isPlayer)
+		/*if (!isPlayer)
 		{
 			blockHP--;
-		}
+		}*/
 	}
 	if (BlockNBall(blockRight.frect, ball) && GetActive())
 	{
 		ball->Xright();
-		if (!isPlayer)
+		/*if (!isPlayer)
 		{
 			blockHP--;
-		}
+		}*/
 	}
 }
 
